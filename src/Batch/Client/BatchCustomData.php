@@ -70,11 +70,11 @@ class BatchCustomData extends BatchAbstract {
       $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
       if ($httpStatus >= 400)
-        throw new BatchException("Error in Batch API: $result");
+        throw BatchException::createFromResponseBody($result);
 
     } else {
       $error = curl_error($curl);
-      throw new BatchException("Error in Batch cURL call: $error");
+      throw new \RuntimeException("Error in Batch cURL call: $error");
     }
   }
 }
