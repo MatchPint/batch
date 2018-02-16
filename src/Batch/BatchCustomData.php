@@ -38,12 +38,12 @@ class BatchCustomData extends BatchAbstract {
   /**
    * @brief Sends a call to Batch Custom Data API.
    * @link  https://batch.com/doc/api/custom-data-api/set-update.html#_request-structure
-   * @param integer $customId Batch's custom id.
-   * @param array $customData Custom to send to Batch.
+   * @param string $customId Batch's custom id.
+   * @param array $values Custom data to send to Batch.
    * @param bool  $overwrite Tells if Batch should override the existing data or override it.
    * @throws BatchException
    */
-  public function send($customId, $customData, $overwrite = FALSE) {
+  public function send($customId, $values, $overwrite = FALSE) {
     $curl = curl_init();
     $opts = [];
     $opts[CURLOPT_RETURNTRANSFER] = TRUE;
@@ -56,7 +56,7 @@ class BatchCustomData extends BatchAbstract {
     // Body of the request.
     $opts[CURLOPT_POSTFIELDS] = json_encode([
       'overwrite' => $overwrite,
-      'values' => $customData
+      'values' => $values
     ]);
 
     // Authorization headers.

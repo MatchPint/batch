@@ -87,9 +87,14 @@ $body = [
 
 ### Custom Data API
 
-Class: ```Batch\BatchCustomData```
+Class: [```Batch\BatchCustomData```](https://github.com/MatchPint/batch/blob/feature/documentation/src/Batch/BatchCustomData.php)
 
- - Update data: `send(customUserId: string, body: array, override: boolean)`
+ - Update data: `send(customUserId: string, values: array, override: boolean)`
+
+    + `customUserId`: Batch Custom Id described [here](https://batch.com/doc/ios/custom-data/customid.html) for iOS and [here](https://batch.com/doc/android/custom-data/customid.html) for Android.
+    + `values`: Array containing the values that should be sent to the API as described [here](https://batch.com/doc/api/custom-data-api/set-update.html#_post-data).
+    + `override`: Instead of merging the data we already have for a user, the existing data will be *deleted* and replaced by the incoming data (default to FALSE).
+
  - Update Bulk data: __TODO__
  - Delete member: __TODO__
 
