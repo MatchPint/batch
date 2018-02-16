@@ -7,8 +7,6 @@
 
 namespace Batch\Exception;
 
-use Throwable;
-
 class BatchException extends \RuntimeException {
 
   /**

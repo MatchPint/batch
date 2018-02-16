@@ -41,9 +41,16 @@ abstract class BatchAbstract {
    * @param string $apiVersion Version of the Batch API used.
    */
   public function __construct ($apiKey, $restKey, $apiVersion = '1.1') {
+    if (empty($apiKey))
+      throw new \InvalidArgumentException("You must provide a non-empty API Key");
+
     $this->apiKey = $apiKey;
+
+    if (empty($restKey))
+      throw new \InvalidArgumentException("You must provide a non-empty Rest Key");
+
     $this->restKey = $restKey;
-    $this->baseURL = "{$this::API_DOMAIN_URL}/{$apiVersion}/{$this->apiKey}";
+    $this->baseURL = self::API_DOMAIN_URL . "/{$apiVersion}/{$this->apiKey}";
   }
 
 }

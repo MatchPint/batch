@@ -20,7 +20,7 @@ class BatchCustomData extends BatchAbstract {
   /**
    * Path to use to access the Custom Data API.
    */
-  const CUSTOM_DATA_PATH = "data/users/";
+  const CUSTOM_DATA_PATH = "data/users";
 
 
   /**
@@ -29,9 +29,9 @@ class BatchCustomData extends BatchAbstract {
    * @param string $restKey REST Key that provides the authorisation to access to the Batch API.
    * @param string $apiVersion Version of the Batch API used.
    */
-  public function __construct($apiKey, $restKey, $apiVersion = '1.1') {
+  public function __construct($apiKey, $restKey, $apiVersion = '1.0') {
     parent::__construct($apiKey, $restKey, $apiVersion);
-    $this->baseURL = "{$this->baseURL}/{$this::CUSTOM_DATA_PATH}";
+    $this->baseURL = "{$this->baseURL}/" . self::CUSTOM_DATA_PATH;
   }
 
   /**
@@ -70,7 +70,7 @@ class BatchCustomData extends BatchAbstract {
       $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
       if ($httpStatus >= 400)
-        throw BatchException::createFromResponseBody($result);
+        throw BatchException::createFromResponseBody(json_decode($result, TRUE));
 
     } else {
       $error = curl_error($curl);
