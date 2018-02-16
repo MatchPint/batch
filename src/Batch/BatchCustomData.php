@@ -6,7 +6,7 @@
  */
 
 
-namespace Batch\Batch;
+namespace Batch;
 
 
 use Batch\Exception\BatchException;

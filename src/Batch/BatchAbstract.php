@@ -6,7 +6,7 @@
  */
 
 
-namespace Batch\Batch;
+namespace Batch;
 
 /**
  * Class BatchService
