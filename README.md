@@ -27,7 +27,7 @@ sudo mv composer.phar /usr/local/bin/composer
 You can install this package using `composer` by running the command below.
 
 ```bash
-php /usr/local/bin/composer/composer.phar require batch
+php /usr/local/bin/composer/composer.phar require matchpint/batch
 ```
 
 You can also add `matchpint\batch` to your the require of your `composer.json` as below
