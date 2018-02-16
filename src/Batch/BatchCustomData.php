@@ -34,6 +34,7 @@ class BatchCustomData extends BatchAbstract {
     $this->baseURL = "{$this->baseURL}/" . self::CUSTOM_DATA_PATH;
   }
 
+
   /**
    * @brief Sends a call to Batch Custom Data API.
    * @link  https://batch.com/doc/api/custom-data-api/set-update.html#_request-structure
@@ -77,4 +78,5 @@ class BatchCustomData extends BatchAbstract {
       throw new \RuntimeException("Error in Batch cURL call: $error");
     }
   }
+
 }
