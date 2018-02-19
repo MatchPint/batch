@@ -110,14 +110,16 @@ MESSAGE;
     $iosException = NULL;
     try {
       $this->iosCustomData->send($customId, $values, $overwrite);
-    } catch (BatchException $exception) {
+    }
+    catch (BatchException $exception) {
       $iosException = $exception;
     }
 
     $androidException = NULL;
     try {
       $this->androidCustomData->send($customId, $values, $overwrite);
-    } catch (BatchException $exception) {
+    }
+    catch (BatchException $exception) {
       $androidException = $exception;
     }
 
