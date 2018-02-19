@@ -15,7 +15,7 @@ use Batch\Exception\BatchException;
  * Class BatchCustomData
  * @brief Provides functions to communicate with Batch Custom Data API endpoints.
  */
-class BatchCustomData extends BatchAbstract {
+class CustomData extends BatchAbstract {
 
   /**
    * Path to use to access the Custom Data API.
@@ -43,7 +43,7 @@ class BatchCustomData extends BatchAbstract {
    * @param bool  $overwrite Tells if Batch should override the existing data or override it.
    * @throws BatchException
    */
-  public function send($customId, $values, $overwrite = FALSE) {
+  public function send($customId, array $values, $overwrite = FALSE) {
     $curl = curl_init();
     $opts = [];
     $opts[CURLOPT_RETURNTRANSFER] = TRUE;
