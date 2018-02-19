@@ -5,11 +5,9 @@
  * @author Marwan El Boussarghini
  */
 
-namespace MatchPint\Service;
+namespace Batch;
 
-use Batch\CustomData;
 use Batch\Exception\BatchException;
-use Phalcon\Di;
 
 
 /**
