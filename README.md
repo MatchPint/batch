@@ -55,6 +55,8 @@ You must get your API Key and Rest Key before using this project.
 
 ## Usage
 
+### Regular usage
+
 
  1. Initialisation
 
@@ -82,18 +84,37 @@ $body = [
  $batchCustomData->send($customUserId, $body, FALSE);
  ```
 
+ ### When you have two projects (iOS and Android)
+
+ In case you have two Batch applications (iOS and Android), you probably want to make sure to send a call to each applications.
+
+ You will find for each client an version of this class implementing calls for two applications (iOS / Android).
+
+ __Convention__: The client `{Client}` will have a `IosAndroid{Client}` equivalent that is implementing this.
+
 
 ## Functionality
 
 ### Custom Data API
 
-Class: [```Batch\BatchCustomData```](https://github.com/MatchPint/batch/blob/feature/documentation/src/Batch/BatchCustomData.php)
+Class: [```Batch\CustomData```](https://github.com/MatchPint/batch/blob/master/src/Batch/CustomData.php)
 
  - Update data: `send(customUserId: string, values: array, override: boolean)`
 
     + `customUserId`: Batch Custom Id described [here](https://batch.com/doc/ios/custom-data/customid.html) for iOS and [here](https://batch.com/doc/android/custom-data/customid.html) for Android.
     + `values`: Array containing the values that should be sent to the API as described [here](https://batch.com/doc/api/custom-data-api/set-update.html#_post-data).
     + `override`: Instead of merging the data we already have for a user, the existing data will be *deleted* and replaced by the incoming data (default to FALSE).
+
+ - Update Bulk data: __TODO__
+ - Delete member: __TODO__
+
+Class [```Batch\IosAndroidCustomData```](https://github.com/MatchPint/batch/blob/master/src/Batch/IosAndroidCustomData.php)
+
+ - Update data:
+
+    + only on iOS: `sendIOS(customUserId: string, values: array, override: boolean)`;
+    + only on Android: `sendAndroid(customUserId: string, values: array, override: boolean)`;
+    + on both projects: `send(customUserId: string, values: array, override: boolean)`
 
  - Update Bulk data: __TODO__
  - Delete member: __TODO__
