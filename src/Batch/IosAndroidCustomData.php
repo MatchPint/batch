@@ -39,6 +39,12 @@ class IosAndroidCustomData {
    * @param string $restKey key
    */
   public function __construct ($iosApiKey, $androidApiKey, $restKey) {
+    if (empty($iosApiKey))
+      throw new \InvalidArgumentException('No batch.iosApiKey defined in config');
+
+    if (empty($androidApiKey))
+      throw new \InvalidArgumentException('No batch.androidApiKey defined in config');
+
     // Get iOS Batch API Key and initialise the iOS BatchCustomData client.
     $this->iosCustomData = new CustomData(
       $iosApiKey,
