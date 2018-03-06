@@ -105,7 +105,10 @@ Class: [```Batch\CustomData```](https://github.com/MatchPint/batch/blob/master/s
     + `values`: Array containing the values that should be sent to the API as described [here](https://batch.com/doc/api/custom-data-api/set-update.html#_post-data).
     + `override`: Instead of merging the data we already have for a user, the existing data will be *deleted* and replaced by the incoming data (default to FALSE).
 
- - Update Bulk data: __TODO__
+ - Update Bulk data: `sendBulk(body: array)`
+
+    + `body`: Body of the request describe [here](https://batch.com/doc/api/custom-data-api/set-update.html#_bulk-post-data)
+
  - Delete member: __TODO__
 
 Class [```Batch\IosAndroidCustomData```](https://github.com/MatchPint/batch/blob/master/src/Batch/IosAndroidCustomData.php)
@@ -114,9 +117,14 @@ Class [```Batch\IosAndroidCustomData```](https://github.com/MatchPint/batch/blob
 
     + only on iOS: `sendIOS(customUserId: string, values: array, override: boolean)`;
     + only on Android: `sendAndroid(customUserId: string, values: array, override: boolean)`;
-    + on both projects: `send(customUserId: string, values: array, override: boolean)`
+    + on both projects: `send(customUserId: string, values: array, override: boolean)`.
 
- - Update Bulk data: __TODO__
+ - Update Bulk data:
+
+     + only on iOS: `sendBulkIOS(body: array)`;
+     + only on Android: `sendBulkAndroid(body: array)`;
+     + on both projects: `sendBulk(body: array)`.
+
  - Delete member: __TODO__
 
 ### Transactional API

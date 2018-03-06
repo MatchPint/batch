@@ -36,7 +36,7 @@ class CustomData extends BatchAbstract {
 
 
   /**
-   * @brief Sends a call to Batch Custom Data API.
+   * @brief Sends an update request to Batch Custom Data API.
    * @link  https://batch.com/doc/api/custom-data-api/set-update.html#_request-structure
    * @param string $customId Batch's custom id.
    * @param array $values Custom data to send to Batch.
@@ -58,6 +58,46 @@ class CustomData extends BatchAbstract {
       'overwrite' => $overwrite,
       'values' => $values
     ]);
+
+    // Authorization headers.
+    $headers = [
+      'Content-Type: application/json',
+      "X-Authorization: {$this->restKey}"
+    ];
+    curl_setopt_array($curl, $opts);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+    if ($result = curl_exec($curl)) {
+      $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+      if ($httpStatus >= 400)
+        throw BatchException::createFromResponseBody(json_decode($result, TRUE));
+
+    } else {
+      $error = curl_error($curl);
+      throw new \RuntimeException("Error in Batch cURL call: $error");
+    }
+  }
+
+
+  /**
+   * @brief Sends a bulk update request to Batch Custom Data API.
+   * @link https://batch.com/doc/api/custom-data-api/set-update.html#_bulk-post-data
+   * @param array $body Body of the request.
+   * @throws BatchException
+   */
+  public function sendBulk(array $body) {
+    $curl = curl_init();
+    $opts = [];
+    $opts[CURLOPT_RETURNTRANSFER] = TRUE;
+    $opts[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
+
+    // Method and URL.
+    $opts[CURLOPT_POST] = TRUE;
+    $opts[CURLOPT_URL] = $this->baseURL;
+
+    // Body of the request.
+    $opts[CURLOPT_POSTFIELDS] = json_encode($body);
 
     // Authorization headers.
     $headers = [
