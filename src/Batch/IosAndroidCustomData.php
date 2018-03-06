@@ -107,7 +107,7 @@ MESSAGE;
   public function send($customId, array $values, $overwrite = FALSE) {
     $iosException = NULL;
     try {
-      $this->iosCustomData->send($customId, $values, $overwrite);
+      $this->sendIOS($customId, $values, $overwrite);
     }
     catch (BatchException $exception) {
       $iosException = $exception;
@@ -115,7 +115,7 @@ MESSAGE;
 
     $androidException = NULL;
     try {
-      $this->androidCustomData->send($customId, $values, $overwrite);
+      $this->sendAndroid($customId, $values, $overwrite);
     }
     catch (BatchException $exception) {
       $androidException = $exception;
