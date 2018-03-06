@@ -77,7 +77,7 @@ MESSAGE;
 
 
   /**
-   * @brief Sends a Custom Data request to the iOS client.
+   * @brief Sends an update Custom Data request to the iOS client.
    * @param integer $customId Batch's custom id.
    * @param array $values Custom data to send to Batch.
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
@@ -88,7 +88,7 @@ MESSAGE;
 
 
   /**
-   * @brief Sends a Custom Data request to the Android client.
+   * @brief Sends an update Custom Data request to the Android client.
    * @param integer $customId Batch's custom id.
    * @param array $values Custom data to send to Batch.
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
@@ -124,4 +124,46 @@ MESSAGE;
     $this->handleClientsExceptions($iosException, $androidException);
   }
 
+
+  /**
+   * @brief Sends a bulk update Custom Data request to the iOS client.
+   * @param array $body Body of the request.
+   */
+  public function sendBulkIOS(array $body) {
+    return $this->iosCustomData->sendBulk($body);
+  }
+
+
+  /**
+   * @brief Sends a bulk update Custom Data request to the Android client.
+   * @param array $body Body of the request.
+   */
+  public function sendBulkAndroid(array $body) {
+    return $this->androidCustomData->sendBulk($body);
+  }
+
+
+  /**
+   * @brief Sends a bulk update request to Batch Custom Data API.
+   * @param array $body
+   */
+  public function sendBulk(array $body) {
+    $iosException = NULL;
+    try {
+      $this->sendBulkIOS($body);
+    }
+    catch (BatchException $exception) {
+      $iosException = $exception;
+    }
+
+    $androidException = NULL;
+    try {
+      $this->sendBulkAndroid($body);
+    }
+    catch (BatchException $exception) {
+      $androidException = $exception;
+    }
+
+    $this->handleClientsExceptions($iosException, $androidException);
+  }
 }
