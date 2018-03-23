@@ -61,6 +61,7 @@ class TransactionalAPI extends BatchAbstract {
     $opts[CURLOPT_URL] = $this->baseURL;
 
     // Body of the request.
+    // MEDIA AND LANDING are not supported it seems (ERROR : `media` is not valid child of `transactional`), hence not added to the body post.
     $opts[CURLOPT_POSTFIELDS] = json_encode([
       'group_id'          => $pushIdentifier,
       'recipients'        => $recipients,
@@ -68,10 +69,8 @@ class TransactionalAPI extends BatchAbstract {
       'priority'          => $optionalFields['priority'],
       'time_to_live'      => $optionalFields['time_to_live'],
       'gcm_collapse_key'  => $optionalFields['gcm_collapse_key'],
-      'media'             => $optionalFields['media'],
       'deeplink'          => $optionalFields['deeplink'],
       'custom_payload'    => $optionalFields['custom_payload'],
-      'landing'           => $optionalFields['landing']
     ], JSON_FORCE_OBJECT);
 
     // Authorization headers.
@@ -86,7 +85,7 @@ class TransactionalAPI extends BatchAbstract {
       $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
       if ($httpStatus == 201 && $this->debug) {
-        $this->log->addInfo('POST successful for ' . $pushIdentifier . 'with' . $recipients, $result);
+        $this->log->addInfo('POST successful for ' . $pushIdentifier . 'with' . $recipients, json_decode($result, TRUE));
       }
       if ($httpStatus >= 400) {
         throw BatchException::createFromResponseBody(json_decode($result, TRUE));
@@ -124,15 +123,7 @@ class TransactionalAPI extends BatchAbstract {
     }
 
     // Casting recipients to string.
-    if (array_key_exists('custom_ids', $recipients)) {
-      $recipients['custom_ids'] = array_map('strval',$recipients['custom_ids']);
-    }
-    if (array_key_exists('tokens', $recipients)) {
-      $recipients['tokens'] = array_map('strval',$recipients['tokens']);
-    }
-    if (array_key_exists('install_ids', $recipients)) {
-      $recipients['install_ids'] = array_map('strval',$recipients['install_ids']);
-    }
+    array_walk_recursive($recipients, function (&$value) { $value = (string)$value; });
 
     $this->sendVerified($pushIdentifier, $recipients, $message, $optionalFields);
   }
