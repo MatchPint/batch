@@ -131,23 +131,20 @@ Class [```Batch\IosAndroidCustomData```](https://github.com/MatchPint/batch/blob
 
 Class: [```Batch\TransactionalAPI```](https://github.com/MatchPint/batch/blob/master/src/Batch/TransactionalAPI.php)
 
- - Send a push notification: `sendPush(requiredFields, optionalFields)`
+ - Send a push notification: `sendPush(pushIdentifier, recipients, message, optionalFields)`
 
-    + `requiredFields`: (ARRAY) Required fields to send a push notification through the transactional api. Must contain :
-    
-        + `pushIdentifier`: (STRING) Name given to a given kind of push notification. ex: _referral_
-        + `recipients`: (ARRAY[STRING[]]) Set of recipients. ex: _["custom_ids" => [162446]]_
-        + `message`: (STRING[]) Message to send to the user, must contain a title and a boy. ex: _["title" => "XXX", "body" => "XXXX"]_
-        
+    + `pushIdentifier`: (STRING) Name given to a given kind of push notification. ex: _referral_
+    + `recipients`: (ARRAY[STRING[]]) Set of recipients ONLY ACCEPTED : __["tokens", "custom_ids", "install_ids"]__. ex: _["custom_ids" => [162446]]_
+    + `message`: (STRING[]) Message to send to the user, must contain a title and a boy. ex: _["title" => "XXX", "body" => "XXXX"]_
     + `optionalFields`: (ARRAY) Any kind of optional field that can precise push notification parameters. For more detailed information see [here](https://batch.com/doc/api/transactional.html#_request-structure)
 
-Class [```Batch\IosAndroidCustomData```](https://github.com/MatchPint/batch/blob/master/src/Batch/IosAndroidCustomData.php)
+Class [```Batch\IosAndroidTransactionalData```](https://github.com/MatchPint/batch/blob/master/src/Batch/IosAndroidTransactionalData.php)
 
  - Send a push notification:
 
-    + only on iOS: `sendPushNotificationIOS(requiredFields, optionalFields)`;
-    + only on Android: `sendPushNotificationAndroid(requiredFields, optionalFields)`;
-    + on both projects: `sendPushNotification(requiredFields, optionalFields)`.
+    + only on iOS: `sendPushNotificationIOS(pushIdentifier, recipients, message, optionalFields)`;
+    + only on Android: `sendPushNotificationAndroid(pushIdentifier, recipients, message, optionalFields)`;
+    + on both projects: `sendPushNotification(pushIdentifier, recipients, message, optionalFields)`.
 
 ### Campaigns API
 

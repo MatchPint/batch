@@ -23,14 +23,14 @@ class TransactionalAPI extends BatchAbstract {
    */
   const TRANSACTIONAL_PATH = "transactional/send";
 
-  private $defaultOptionalValues = [
-    'priority' => 'normal',
-    'time_to_live' => 172800,
+  private static $DEFAULT_OPTIONAL_VALUES = [
+    'priority'         => 'normal',
+    'time_to_live'     => 172800,
     'gcm_collapse_key' => ['enabled' => false, 'key' => 'default'],
-    'media' => [],
-    'deeplink' => '',
-    'custom_payload' => '',
-    'landing' => []
+    'media'            => [],
+    'deeplink'         => '',
+    'custom_payload'   => '',
+    'landing'          => []
   ];
 
   protected $debug = true;
@@ -41,18 +41,16 @@ class TransactionalAPI extends BatchAbstract {
     $this->baseURL = "{$this->baseURL}/" . self::TRANSACTIONAL_PATH;
   }
 
+
   /**
-   * @brief https://batch.com/doc/api/transactional.html
-   * @param $campaignName
-   * @param $recipients
-   * @param $message
-   * @param array $media
-   * @param string $deeplink
-   * @param string $custom_payload
-   * @param array $landing
-   * @param string $priority
+   * @brief Send information to batch to create a push notification.
+   * @link https://batch.com/doc/api/transactional.html
+   * @param string $pushIdentifier Identifier of the push notification.
+   * @param array $recipients Recipients of the notification.
+   * @param string[] $message Message of the notification.
+   * @param array $optionalFields Optional fields, overwriting default values.
    */
-  protected function send($requiredFields, $optionalFields){
+  protected function sendVerified($pushIdentifier, $recipients, $message, $optionalFields){
     $curl = curl_init();
     $opts = [];
     $opts[CURLOPT_RETURNTRANSFER] = TRUE;
@@ -64,16 +62,16 @@ class TransactionalAPI extends BatchAbstract {
 
     // Body of the request.
     $opts[CURLOPT_POSTFIELDS] = json_encode([
-      'group_id' => $requiredFields['pushIdentifier'],
-      'priority' => $optionalFields['priority'],
-      'time_to_live' => $optionalFields['time_to_live'],
-      'gcm_collapse_key' => $optionalFields['gcm_collapse_key'],
-      'recipients' => $requiredFields['recipients'],
-      'message' => $requiredFields['message'],
-      'media' => $optionalFields['media'],
-      'deeplink' => $optionalFields['deeplink'],
-      'custom_payload' => $optionalFields['custom_payload'],
-      'landing' => $optionalFields['landing']
+      'group_id'          => $pushIdentifier,
+      'recipients'        => $recipients,
+      'message'           => $message,
+      'priority'          => $optionalFields['priority'],
+      'time_to_live'      => $optionalFields['time_to_live'],
+      'gcm_collapse_key'  => $optionalFields['gcm_collapse_key'],
+      'media'             => $optionalFields['media'],
+      'deeplink'          => $optionalFields['deeplink'],
+      'custom_payload'    => $optionalFields['custom_payload'],
+      'landing'           => $optionalFields['landing']
     ]);
 
     // Authorization headers.
@@ -87,12 +85,12 @@ class TransactionalAPI extends BatchAbstract {
     if ($result = curl_exec($curl)) {
       $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-      if ($httpStatus == 201 && $this->debug)
-        $this->log->addInfo('POST successful for ' . $requiredFields['pushIdentifier'] . 'with' . $requiredFields['recipients'] ,$result);
-
-      if ($httpStatus >= 400)
+      if ($httpStatus == 201 && $this->debug) {
+        $this->log->addInfo('POST successful for ' . $pushIdentifier . 'with' . $recipients, $result);
+      }
+      if ($httpStatus >= 400) {
         throw BatchException::createFromResponseBody(json_decode($result, TRUE));
-
+      }
     } else {
       $error = curl_error($curl);
       throw new \RuntimeException("Error in Batch cURL call: $error");
@@ -101,20 +99,30 @@ class TransactionalAPI extends BatchAbstract {
 
 
   /**
-   * @brief Send push notification with only required params.
-   * @param $pushIdentifier
-   * @param $recipients
-   * @param $title
-   * @param $messageBody
+   * @brief Verify the required params and send the notification.
+   * @param string $pushIdentifier Identifier of the push notification.
+   * @param array $recipients Recipients of the notification.
+   * @param string[] $message Message of the notification.
+   * @param array $optionalFields Optional fields, overwriting default values.
    */
-  public function sendPush($requiredFields, $optionalFields =[]) {
+  public function sendPush($pushIdentifier, $recipients, $message, $optionalFields =[]) {
 
-    $optionalFields = array_merge($this->defaultOptionalValues, $optionalFields);
-    if (!array_key_exists('pushIdentifier', $requiredFields) ||
-      !array_key_exists('message', $requiredFields) || !array_key_exists('recipients', $requiredFields)) {
-      throw new BatchException('Missing required fields in body', 32);
+    $optionalFields = array_merge(self::$DEFAULT_OPTIONAL_VALUES, $optionalFields);
+
+    // Check pushIdentifier.
+    if (!is_string($pushIdentifier) || empty($pushIdentifier)) {
+      throw new BatchException('Incorrect push identifier field', 32);
     }
-    $this->send($requiredFields, $optionalFields);
+    // Check recipients.
+    if (!is_array($recipients) || empty($recipients) ||
+      !(array_key_exists('custom_ids', $recipients) || array_key_exists('tokens', $recipients) || array_key_exists('install_ids', $recipients))) {
+      throw new BatchException('Incorrect recipients field', 32);
+    }
+    // Check message.
+    if (!is_array($message) || empty($message) || !(array_key_exists('title', $message) && array_key_exists('body', $message))) {
+      throw new BatchException('Incorrect message field', 32);
+    }
+    $this->sendVerified($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
 
