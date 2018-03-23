@@ -8,7 +8,6 @@
 namespace Batch;
 
 use Batch\Exception\BatchException;
-use Batch\Exception\TransactionalAPI;
 
 
 /**

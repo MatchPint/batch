@@ -11,10 +11,8 @@
  * Date: 23/03/2018
  */
 
-namespace Batch\Exception;
+namespace Batch;
 
-
-use Batch\BatchAbstract;
 
 class TransactionalAPI extends BatchAbstract {
 
