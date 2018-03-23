@@ -64,7 +64,7 @@ class TransactionalAPI extends BatchAbstract {
 
     // Body of the request.
     $opts[CURLOPT_POSTFIELDS] = json_encode([
-      'group_id' => $requiredFields['campaignName'],
+      'group_id' => $requiredFields['pushIdentifier'],
       'priority' => $optionalFields['priority'],
       'time_to_live' => $optionalFields['time_to_live'],
       'gcm_collapse_key' => $optionalFields['gcm_collapse_key'],
@@ -88,7 +88,7 @@ class TransactionalAPI extends BatchAbstract {
       $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
       if ($httpStatus == 201 && $this->debug)
-        $this->log->addInfo('POST successful for ' . $requiredFields['campaignName'] . 'with' . $requiredFields['recipients'] ,$result);
+        $this->log->addInfo('POST successful for ' . $requiredFields['pushIdentifier'] . 'with' . $requiredFields['recipients'] ,$result);
 
       if ($httpStatus >= 400)
         throw BatchException::createFromResponseBody(json_decode($result, TRUE));
@@ -102,7 +102,7 @@ class TransactionalAPI extends BatchAbstract {
 
   /**
    * @brief Send push notification with only required params.
-   * @param $campaignName
+   * @param $pushIdentifier
    * @param $recipients
    * @param $title
    * @param $messageBody
@@ -110,7 +110,7 @@ class TransactionalAPI extends BatchAbstract {
   public function sendPush($requiredFields, $optionalFields =[]) {
 
     $optionalFields = array_merge($this->defaultOptionalValues, $optionalFields);
-    if (!array_key_exists('campaignName', $requiredFields) ||
+    if (!array_key_exists('pushIdentifier', $requiredFields) ||
       !array_key_exists('message', $requiredFields) || !array_key_exists('recipients', $requiredFields)) {
       throw new BatchException('Missing required fields in body', 32);
     }
