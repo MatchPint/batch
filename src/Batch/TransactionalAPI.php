@@ -29,7 +29,7 @@ class TransactionalAPI extends BatchAbstract {
     'gcm_collapse_key' => ['enabled' => false, 'key' => 'default'],
     'media'            => [],
     'deeplink'         => '',
-    'custom_payload'   => '',
+    'custom_payload'   => '{}',
     'landing'          => []
   ];
 
@@ -72,7 +72,7 @@ class TransactionalAPI extends BatchAbstract {
       'deeplink'          => $optionalFields['deeplink'],
       'custom_payload'    => $optionalFields['custom_payload'],
       'landing'           => $optionalFields['landing']
-    ]);
+    ], JSON_FORCE_OBJECT);
 
     // Authorization headers.
     $headers = [
@@ -122,6 +122,18 @@ class TransactionalAPI extends BatchAbstract {
     if (!is_array($message) || empty($message) || !(array_key_exists('title', $message) && array_key_exists('body', $message))) {
       throw new BatchException('Incorrect message field', 32);
     }
+
+    // Casting recipients to string.
+    if (array_key_exists('custom_ids', $recipients)) {
+      $recipients['custom_ids'] = array_map('strval',$recipients['custom_ids']);
+    }
+    if (array_key_exists('tokens', $recipients)) {
+      $recipients['tokens'] = array_map('strval',$recipients['tokens']);
+    }
+    if (array_key_exists('install_ids', $recipients)) {
+      $recipients['install_ids'] = array_map('strval',$recipients['install_ids']);
+    }
+
     $this->sendVerified($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
