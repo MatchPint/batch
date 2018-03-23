@@ -15,7 +15,7 @@ use Monolog\Logger;
  * Class BatchService
  * @brief Abstract class to model the basic specifications of Batch API.
  */
-abstract class BatchAbstract {
+abstract class BatchAbstract extends \Phalcon\Di\Injectable implements \Phalcon\Di\InjectionAwareInterface {
 
   /**
    * Domain URL of the Batch API (custom, transactional and campaigns).
@@ -60,6 +60,9 @@ abstract class BatchAbstract {
 
     $this->restKey = $restKey;
     $this->baseURL = self::API_DOMAIN_URL . "/{$apiVersion}/{$this->apiKey}";
+
+    $this->log = $this->di['log'];
+
   }
 
 }
