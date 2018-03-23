@@ -14,6 +14,8 @@
 namespace Batch;
 
 
+use Batch\Exception\BatchException;
+
 class TransactionalAPI extends BatchAbstract {
 
   /**
