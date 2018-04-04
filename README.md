@@ -129,7 +129,22 @@ Class [```Batch\IosAndroidCustomData```](https://github.com/MatchPint/batch/blob
 
 ### Transactional API
 
-__TODO__
+Class: [```Batch\TransactionalAPI```](https://github.com/MatchPint/batch/blob/master/src/Batch/TransactionalAPI.php)
+
+ - Send a push notification: `sendPush(pushIdentifier, recipients, message, optionalFields)`
+
+    + `pushIdentifier`: (STRING) Name given to a given kind of push notification. ex: _referral_
+    + `recipients`: (ARRAY[STRING[]]) Set of recipients ONLY ACCEPTED : __["tokens", "custom_ids", "install_ids"]__. ex: _["custom_ids" => [162446]]_
+    + `message`: (STRING[]) Message to send to the user, must contain a title and a boy. ex: _["title" => "XXX", "body" => "XXXX"]_
+    + `optionalFields`: (ARRAY) Any kind of optional field that can precise push notification parameters. For more detailed information see [here](https://batch.com/doc/api/transactional.html#_request-structure)
+
+Class [```Batch\IosAndroidTransactionalData```](https://github.com/MatchPint/batch/blob/master/src/Batch/IosAndroidTransactionalData.php)
+
+ - Send a push notification:
+
+    + only on iOS: `sendPushNotificationIOS(pushIdentifier, recipients, message, optionalFields)`;
+    + only on Android: `sendPushNotificationAndroid(pushIdentifier, recipients, message, optionalFields)`;
+    + on both projects: `sendPushNotification(pushIdentifier, recipients, message, optionalFields)`.
 
 ### Campaigns API
 

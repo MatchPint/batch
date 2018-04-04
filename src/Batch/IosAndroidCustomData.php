@@ -35,8 +35,8 @@ class IosAndroidCustomData {
   /**
    * @brief IosAndroidCustomData constructor.
    * @param string $iosApiKey API key of the iOS project.
-   * @param string $androidApiKey Android key of
-   * @param string $restKey key
+   * @param string $androidApiKey API key of the Android project
+   * @param string $restKey Access key to Batch for Matchpint Ltd.
    */
   public function __construct ($iosApiKey, $androidApiKey, $restKey) {
     if (empty($iosApiKey))
@@ -56,6 +56,7 @@ class IosAndroidCustomData {
       $androidApiKey,
       $restKey,
       self::BATCH_API_VERSION);
+
   }
 
 
@@ -173,3 +174,4 @@ MESSAGE;
     $this->handleClientsExceptions($iosException, $androidException);
   }
 }
+
