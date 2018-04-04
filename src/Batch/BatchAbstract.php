@@ -8,11 +8,14 @@
 
 namespace Batch;
 
+
+use Monolog\Logger;
+
 /**
  * Class BatchService
  * @brief Abstract class to model the basic specifications of Batch API.
  */
-abstract class BatchAbstract {
+abstract class BatchAbstract extends \Phalcon\Di\Injectable implements \Phalcon\Di\InjectionAwareInterface {
 
   /**
    * Domain URL of the Batch API (custom, transactional and campaigns).
@@ -35,12 +38,18 @@ abstract class BatchAbstract {
   protected $baseURL;
 
   /**
+   * @var Logger $log
+   */
+  protected $log;
+
+  /**
    * @brief BatchService constructor.
    * @param string $apiKey API Key corresponding to the Batch account to send request to.
    * @param string $restKey REST Key that provides the authorisation to access to the Batch API.
    * @param string $apiVersion Version of the Batch API used.
    */
-  public function __construct ($apiKey, $restKey, $apiVersion = '1.1') {
+  public function __construct ($apiKey, $restKey, $apiVersion = '1.1')
+  {
     if (empty($apiKey))
       throw new \InvalidArgumentException("You must provide a non-empty API Key");
 
@@ -51,6 +60,9 @@ abstract class BatchAbstract {
 
     $this->restKey = $restKey;
     $this->baseURL = self::API_DOMAIN_URL . "/{$apiVersion}/{$this->apiKey}";
+
+    $this->log = $this->di['log'];
+
   }
 
 }

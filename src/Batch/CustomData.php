@@ -22,7 +22,6 @@ class CustomData extends BatchAbstract {
    */
   const CUSTOM_DATA_PATH = "data/users";
 
-
   /**
    * @brief Batch constructor.
    * @param string $apiKey API Key corresponding to the Batch account to send request to.
