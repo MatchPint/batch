@@ -23,11 +23,13 @@ class TransactionalAPI extends BatchAbstract {
    */
   const TRANSACTIONAL_PATH = "transactional/send";
 
+  const DEFAULT_LOGO = "https://www.matchpint.co.uk/static/img/favicons/apple-touch-icon-precomposed-57x57.png";
+
   private static $DEFAULT_OPTIONAL_VALUES = [
     'priority'         => 'normal',
     'time_to_live'     => 172800,
     'gcm_collapse_key' => ['enabled' => false, 'key' => 'default'],
-    'media'            => [],
+    'media'            => ['icon' => self::DEFAULT_LOGO],
     'deeplink'         => '',
     'custom_payload'   => '{}',
     'landing'          => []
