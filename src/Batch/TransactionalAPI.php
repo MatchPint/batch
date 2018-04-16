@@ -61,7 +61,6 @@ class TransactionalAPI extends BatchAbstract {
     $opts[CURLOPT_URL] = $this->baseURL;
 
     // Body of the request.
-    // MEDIA AND LANDING are not supported it seems (ERROR : `media` is not valid child of `transactional`), hence not added to the body post.
     $opts[CURLOPT_POSTFIELDS] = json_encode([
       'group_id'          => $pushIdentifier,
       'recipients'        => $recipients,
@@ -71,6 +70,8 @@ class TransactionalAPI extends BatchAbstract {
       'gcm_collapse_key'  => $optionalFields['gcm_collapse_key'],
       'deeplink'          => $optionalFields['deeplink'],
       'custom_payload'    => $optionalFields['custom_payload'],
+      'media'             => $optionalFields['media'],
+      'landing'           => $optionalFields['landing']
     ]);
 
     // Authorization headers.
