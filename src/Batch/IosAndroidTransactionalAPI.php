@@ -24,7 +24,7 @@ class IosAndroidTransactionalAPI
   /**
    * Version of the Batch API used.
    */
-  const BATCH_API_VERSION = "1.0";
+  const BATCH_API_VERSION = "1.1";
 
   /**
    * @var TransactionalAPI $transactionalApi Batch transactional api client for iOS.

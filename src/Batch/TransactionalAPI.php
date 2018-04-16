@@ -71,6 +71,7 @@ class TransactionalAPI extends BatchAbstract {
       'gcm_collapse_key'  => $optionalFields['gcm_collapse_key'],
       'deeplink'          => $optionalFields['deeplink'],
       'custom_payload'    => $optionalFields['custom_payload'],
+      'media'             => $optionalFields['media']
     ]);
 
     // Authorization headers.
