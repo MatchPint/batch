@@ -1,5 +1,6 @@
 {
   "name": "matchpint/batch",
+  "version": "dev-master",
   "description": "Package providing a PHP implementation of the different Batch APIs functionality.",
   "keywords": ["batch", "marketing", "PHP", "composer", "api"],
   "homepage": "https://github.com/MatchPint/batch",
