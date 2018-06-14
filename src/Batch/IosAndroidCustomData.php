@@ -67,8 +67,16 @@ class IosAndroidCustomData {
    */
   private function handleClientsExceptions($iosException, $androidException) {
     // If one of the apps returns no error, the call is a success.
-    if (is_null($iosException) || is_null($androidException))
+    if (is_null($iosException) && is_null($androidException))
       return;
+
+    if (is_null($androidException)) {
+      throw $iosException;
+    }
+
+    if (is_null($iosException)) {
+      throw $androidException;
+    }
 
     if ($iosException->getCode() === $androidException->getCode())
       throw $iosException;
@@ -101,7 +109,7 @@ MESSAGE;
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
    */
   public function sendAndroid($customId, array $values, $overwrite = FALSE) {
-    $this->iosCustomData->send($customId, $values, $overwrite);
+    $this->androidCustomData->send($customId, $values, $overwrite);
   }
 
 
