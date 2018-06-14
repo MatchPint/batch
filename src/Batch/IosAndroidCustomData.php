@@ -67,8 +67,16 @@ class IosAndroidCustomData {
    */
   private function handleClientsExceptions($iosException, $androidException) {
     // If one of the apps returns no error, the call is a success.
-    if (is_null($iosException) || is_null($androidException))
+    if (is_null($iosException) && is_null($androidException))
       return;
+
+    if (is_null($androidException)) {
+      throw $iosException;
+    }
+
+    if (is_null($iosException)) {
+      throw $androidException;
+    }
 
     if ($iosException->getCode() === $androidException->getCode())
       throw $iosException;
