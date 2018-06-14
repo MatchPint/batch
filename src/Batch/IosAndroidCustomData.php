@@ -101,7 +101,7 @@ MESSAGE;
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
    */
   public function sendAndroid($customId, array $values, $overwrite = FALSE) {
-    $this->iosCustomData->send($customId, $values, $overwrite);
+    $this->androidCustomData->send($customId, $values, $overwrite);
   }
 
 
