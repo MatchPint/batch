@@ -84,9 +84,6 @@ class TransactionalAPI extends BatchAbstract {
     if ($result = curl_exec($curl)) {
       $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-      if ($httpStatus == 201 && $this->debug) {
-        $this->log->addInfo('POST successful for ' . $pushIdentifier . 'with' . $recipients, json_decode($result, TRUE));
-      }
       if ($httpStatus >= 400) {
         throw BatchException::createFromResponseBody(json_decode($result, TRUE));
       }

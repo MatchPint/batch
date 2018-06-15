@@ -79,7 +79,7 @@ class IosAndroidTransactionalAPI
       throw $iosException;
 
     $errorMessage = <<<MESSAGE
-2 Exceptions occured.
+2 Exceptions occurred.
 [iOS-{$iosException->getCode()}]{$iosException->getMessage()}[/iOS]
 [Android-{$androidException->getCode()}]{$androidException->getMessage()}[/Android]
 MESSAGE;
