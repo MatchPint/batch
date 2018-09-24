@@ -93,10 +93,10 @@ MESSAGE;
    * @param array $recipients Recipients of the notification.
    * @param string[] $message Message of the notification.
    * @param array $optionalFields Optional fields, overwriting default values.
-   * @return void
+   * @return array
    */
   public function sendPushNotificationIOS($pushIdentifier, array $recipients, array $message, array $optionalFields=[]) {
-    $this->iosTransactionalApi->sendPush($pushIdentifier, $recipients, $message, $optionalFields);
+    return $this->iosTransactionalApi->sendPush($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
 
@@ -106,10 +106,10 @@ MESSAGE;
    * @param array $recipients Recipients of the notification.
    * @param string[] $message Message of the notification.
    * @param array $optionalFields Optional fields, overwriting default values.
-   * @return void
+   * @return array
    */
   public function sendPushNotificationAndroid($pushIdentifier, array $recipients, array $message, array $optionalFields=[]) {
-    $this->androidTransactionalApi->sendPush($pushIdentifier, $recipients, $message, $optionalFields);
+    return $this->androidTransactionalApi->sendPush($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
   /**
@@ -118,11 +118,12 @@ MESSAGE;
    * @param array $recipients Recipients of the notification.
    * @param string[] $message Message of the notification.
    * @param array $optionalFields Optional fields, overwriting default values.
+   * @return array;
    */
   public function sendPushNotification($pushIdentifier, array $recipients, array $message, array $optionalFields=[]) {
     $iosException = NULL;
     try {
-      $this->sendPushNotificationIOS($pushIdentifier, $recipients, $message, $optionalFields);
+      return $this->sendPushNotificationIOS($pushIdentifier, $recipients, $message, $optionalFields);
     }
     catch (BatchException $exception) {
       $iosException = $exception;
@@ -130,7 +131,7 @@ MESSAGE;
 
     $androidException = NULL;
     try {
-      $this->sendPushNotificationAndroid($pushIdentifier, $recipients, $message, $optionalFields);
+      return $this->sendPushNotificationAndroid($pushIdentifier, $recipients, $message, $optionalFields);
     }
     catch (BatchException $exception) {
       $androidException = $exception;
