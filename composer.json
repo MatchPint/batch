@@ -1,25 +1,46 @@
 {
-  "name": "matchpint/batch",
-  "version": "dev-master",
-  "description": "Package providing a PHP implementation of the different Batch APIs functionality.",
-  "keywords": ["batch", "marketing", "PHP", "composer", "api"],
-  "homepage": "https://github.com/MatchPint/batch",
-  "type": "library",
-  "license": "Apache-2.0",
-  "authors": [
-    {
-      "name": "Marwan El Boussarghini",
-      "email": "marwan@matchpint.co.uk",
-      "homepage": "https://www.linkedin.com/in/marwan-el-boussarghini"
+    "name": "matchpint/batch",
+    "version": "dev-master",
+    "description": "Package providing a PHP implementation of the different Batch APIs functionality.",
+    "keywords": [
+        "batch",
+        "marketing",
+        "PHP",
+        "composer",
+        "api"
+    ],
+    "homepage": "https://github.com/MatchPint/batch",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Marwan El Boussarghini",
+            "email": "marwan@matchpint.co.uk",
+            "homepage": "https://www.linkedin.com/in/marwan-el-boussarghini"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "ext-curl": "*",
+        "ext-fileinfo": "*",
+        "ext-gd": "*",
+        "ext-imagick": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-memcached": "*",
+        "ext-mysqli": "*",
+        "ext-pdo": "*",
+        "ext-phalcon": "^3.0",
+        "ext-posix": "*",
+        "ext-soap": "*",
+        "ext-xml": "*",
+        "ext-zip": "*",
+        "monolog/monolog": "~1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Batch\\": "src/"
+        }
     }
-  ],
-  "require": {
-    "php": ">=5.4.0",
-    "monolog/monolog": "~1"
-  },
-  "autoload": {
-    "psr-0": {
-      "Batch\\": "src/"
-    }
-  }
 }
