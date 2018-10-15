@@ -27,10 +27,6 @@ class TransactionalAPI extends BatchAbstract {
     'priority'         => 'normal',
     'time_to_live'     => 172800,
     'gcm_collapse_key' => ['enabled' => false, 'key' => 'default'],
-    'media'            => [],
-    'deeplink'         => '',
-    'custom_payload'   => '{}',
-    'landing'          => []
   ];
 
   protected $debug = true;
@@ -49,6 +45,7 @@ class TransactionalAPI extends BatchAbstract {
    * @param array $recipients Recipients of the notification.
    * @param string[] $message Message of the notification.
    * @param array $optionalFields Optional fields, overwriting default values.
+   * @return array;
    */
   protected function sendVerified($pushIdentifier, $recipients, $message, $optionalFields){
     $curl = curl_init();
@@ -60,18 +57,17 @@ class TransactionalAPI extends BatchAbstract {
     $opts[CURLOPT_POST] = TRUE;
     $opts[CURLOPT_URL] = $this->baseURL;
 
+    // Build the content of the POST
+    $post = [
+      'group_id'   => $pushIdentifier,
+      'recipients' => $recipients,
+      'message'    => $message,
+    ];
+    foreach ($optionalFields as $name => $value) {
+      $post[$name] = $value;
+    }
     // Body of the request.
-    $opts[CURLOPT_POSTFIELDS] = json_encode([
-      'group_id'          => $pushIdentifier,
-      'recipients'        => $recipients,
-      'message'           => $message,
-      'priority'          => $optionalFields['priority'],
-      'time_to_live'      => $optionalFields['time_to_live'],
-      'gcm_collapse_key'  => $optionalFields['gcm_collapse_key'],
-      'deeplink'          => $optionalFields['deeplink'],
-      'custom_payload'    => $optionalFields['custom_payload'],
-      'media'             => $optionalFields['media']
-    ]);
+    $opts[CURLOPT_POSTFIELDS] = json_encode($post);
 
     // Authorization headers.
     $headers = [
@@ -91,6 +87,11 @@ class TransactionalAPI extends BatchAbstract {
       $error = curl_error($curl);
       throw new \RuntimeException("Error in Batch cURL call: $error");
     }
+
+    return [
+      'body' => $result,
+      'code' => $httpStatus
+    ];
   }
 
 
@@ -100,6 +101,7 @@ class TransactionalAPI extends BatchAbstract {
    * @param array $recipients Recipients of the notification.
    * @param string[] $message Message of the notification.
    * @param array $optionalFields Optional fields, overwriting default values.
+   * @return array
    */
   public function sendPush($pushIdentifier, $recipients, $message, $optionalFields =[]) {
 
@@ -122,7 +124,7 @@ class TransactionalAPI extends BatchAbstract {
     // Casting recipients to string.
     array_walk_recursive($recipients, function (&$value) { $value = (string)$value; });
 
-    $this->sendVerified($pushIdentifier, $recipients, $message, $optionalFields);
+    return $this->sendVerified($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
 
