@@ -98,7 +98,7 @@ MESSAGE;
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
    */
   public function sendIOS($customId, array $values, $overwrite = FALSE) {
-    $this->iosCustomData->send($customId, $values, $overwrite);
+    return $this->iosCustomData->send($customId, $values, $overwrite);
   }
 
 
@@ -109,7 +109,7 @@ MESSAGE;
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
    */
   public function sendAndroid($customId, array $values, $overwrite = FALSE) {
-    $this->androidCustomData->send($customId, $values, $overwrite);
+    return $this->androidCustomData->send($customId, $values, $overwrite);
   }
 
 
@@ -120,9 +120,10 @@ MESSAGE;
    * @param boolean $overwrite Tells if Batch should override the existing data or override it.
    */
   public function send($customId, array $values, $overwrite = FALSE) {
+    $result = [];
     $iosException = NULL;
     try {
-      $this->sendIOS($customId, $values, $overwrite);
+      $result['ios'] = $this->sendIOS($customId, $values, $overwrite);
     }
     catch (BatchException $exception) {
       $iosException = $exception;
@@ -130,13 +131,15 @@ MESSAGE;
 
     $androidException = NULL;
     try {
-      $this->sendAndroid($customId, $values, $overwrite);
+      $result['android'] = $this->sendAndroid($customId, $values, $overwrite);
     }
     catch (BatchException $exception) {
       $androidException = $exception;
     }
 
     $this->handleClientsExceptions($iosException, $androidException);
+
+    return $result;
   }
 
 
