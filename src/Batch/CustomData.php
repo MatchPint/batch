@@ -96,6 +96,19 @@ class CustomData extends BatchAbstract {
     $opts[CURLOPT_POST] = TRUE;
     $opts[CURLOPT_URL] = $this->baseURL;
 
+    // Check format is valid
+    foreach ($body as $oneEntry) {
+      if (empty($oneEntry['id'])) {
+        throw new \RuntimeException('All entries in body must have an "id" field');
+      }
+      if (empty($oneEntry['update'])) {
+        throw new \RuntimeException('All entries in body must have an "update" field');
+      }
+      if (empty($oneEntry['update']['values'])) {
+        throw new \RuntimeException('All entries in body must have "values" in their "update" field');
+      }
+    }
+
     // Body of the request.
     $opts[CURLOPT_POSTFIELDS] = json_encode($body);
 
