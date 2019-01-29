@@ -38,7 +38,7 @@ class IosAndroidCustomData {
    * @param string $androidApiKey API key of the Android project
    * @param string $restKey Access key to Batch for Matchpint Ltd.
    */
-  public function __construct ($iosApiKey, $androidApiKey, $restKey) {
+  public function __construct($iosApiKey, $androidApiKey, $restKey) {
     if (empty($iosApiKey))
       throw new \InvalidArgumentException('No batch.iosApiKey defined in config');
 
@@ -124,16 +124,14 @@ MESSAGE;
     $iosException = NULL;
     try {
       $result['ios'] = $this->sendIOS($customId, $values, $overwrite);
-    }
-    catch (BatchException $exception) {
+    } catch (BatchException $exception) {
       $iosException = $exception;
     }
 
     $androidException = NULL;
     try {
       $result['android'] = $this->sendAndroid($customId, $values, $overwrite);
-    }
-    catch (BatchException $exception) {
+    } catch (BatchException $exception) {
       $androidException = $exception;
     }
 
@@ -164,25 +162,29 @@ MESSAGE;
   /**
    * @brief Sends a bulk update request to Batch Custom Data API.
    * @param array $body
+   * @return array
    */
   public function sendBulk(array $body) {
     $iosException = NULL;
     try {
-      $this->sendBulkIOS($body);
-    }
-    catch (BatchException $exception) {
+      $resIos = $this->sendBulkIOS($body);
+    } catch (BatchException $exception) {
       $iosException = $exception;
     }
 
     $androidException = NULL;
     try {
-      $this->sendBulkAndroid($body);
-    }
-    catch (BatchException $exception) {
+      $resAndroid = $this->sendBulkAndroid($body);
+    } catch (BatchException $exception) {
       $androidException = $exception;
     }
 
     $this->handleClientsExceptions($iosException, $androidException);
+
+    return [
+      'ios'     => $resIos,
+      'android' => $resAndroid,
+    ];
   }
 }
 
