@@ -126,6 +126,7 @@ class CustomData extends BatchAbstract {
       if ($httpStatus >= 400)
         throw BatchException::createFromResponseBody(json_decode($result, TRUE));
 
+      return $result;
     } else {
       $error = curl_error($curl);
       throw new \RuntimeException("Error in Batch cURL call: $error");
