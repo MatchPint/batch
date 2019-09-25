@@ -12,14 +12,14 @@
  */
 
 namespace Batch;
+
 use Batch\Exception\BatchException;
 
 /**
  * IosAndroidTransactionalAPI class.
  * @brief Implements the Transactional API for two apps (iOS and Android).
  */
-class IosAndroidTransactionalAPI
-{
+class IosAndroidTransactionalAPI {
 
   /**
    * Version of the Batch API used.
@@ -43,12 +43,14 @@ class IosAndroidTransactionalAPI
    * @param string $androidApiKey API key of the Android project
    * @param string $restKey Access key to Batch.
    */
-  public function __construct ($iosApiKey, $androidApiKey, $restKey) {
-    if (empty($iosApiKey))
+  public function __construct($iosApiKey, $androidApiKey, $restKey) {
+    if (empty($iosApiKey)) {
       throw new \InvalidArgumentException('No batch.iosApiKey defined in config');
+    }
 
-    if (empty($androidApiKey))
+    if (empty($androidApiKey)) {
       throw new \InvalidArgumentException('No batch.androidApiKey defined in config');
+    }
 
     // Create the instance of the iOS transactional api client.
     $this->iosTransactionalApi = new TransactionalAPI(
@@ -72,11 +74,13 @@ class IosAndroidTransactionalAPI
    */
   private function handleClientsExceptions($iosException, $androidException) {
     // If one of the apps returns no error, the call is a success.
-    if (is_null($iosException) || is_null($androidException))
+    if (is_null($iosException) || is_null($androidException)) {
       return;
+    }
 
-    if ($iosException->getCode() === $androidException->getCode())
+    if ($iosException->getCode() === $androidException->getCode()) {
       throw $iosException;
+    }
 
     $errorMessage = <<<MESSAGE
 2 Exceptions occurred.
@@ -95,7 +99,16 @@ MESSAGE;
    * @param array $optionalFields Optional fields, overwriting default values.
    * @return array
    */
-  public function sendPushNotificationIOS($pushIdentifier, array $recipients, array $message, array $optionalFields=[]) {
+  public function sendPushNotificationIOS($pushIdentifier, array $recipients, array $message, array $optionalFields = []) {
+    if (!empty($optionalFields['media']) && !empty($optionalFields['media']['icon'])) {
+      // No icon supported on iOS
+      unset($optionalFields['media']['icon']);
+
+      // If all we had in media was an icon, remove media
+      if (empty($optionalFields['media'])) {
+        unset($optionalFields['media']);
+      }
+    }
     return $this->iosTransactionalApi->sendPush($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
@@ -108,7 +121,7 @@ MESSAGE;
    * @param array $optionalFields Optional fields, overwriting default values.
    * @return array
    */
-  public function sendPushNotificationAndroid($pushIdentifier, array $recipients, array $message, array $optionalFields=[]) {
+  public function sendPushNotificationAndroid($pushIdentifier, array $recipients, array $message, array $optionalFields = []) {
     return $this->androidTransactionalApi->sendPush($pushIdentifier, $recipients, $message, $optionalFields);
   }
 
@@ -120,23 +133,34 @@ MESSAGE;
    * @param array $optionalFields Optional fields, overwriting default values.
    * @return array;
    */
-  public function sendPushNotification($pushIdentifier, array $recipients, array $message, array $optionalFields=[]) {
-    $iosException = NULL;
+  public function sendPushNotification($pushIdentifier, array $recipients, array $message, array $optionalFields = []) {
+    $iosException = null;
     try {
-      return $this->sendPushNotificationIOS($pushIdentifier, $recipients, $message, $optionalFields);
-    }
-    catch (BatchException $exception) {
+      $iosResult = $this->sendPushNotificationIOS($pushIdentifier, $recipients, $message, $optionalFields);
+    } catch (BatchException $exception) {
       $iosException = $exception;
     }
 
-    $androidException = NULL;
+    $androidException = null;
     try {
-      return $this->sendPushNotificationAndroid($pushIdentifier, $recipients, $message, $optionalFields);
-    }
-    catch (BatchException $exception) {
+      $androidResult = $this->sendPushNotificationAndroid($pushIdentifier, $recipients, $message, $optionalFields);
+    } catch (BatchException $exception) {
       $androidException = $exception;
     }
 
     $this->handleClientsExceptions($iosException, $androidException);
+
+    if (empty($iosResult)) {
+      $iosResult = $iosException->getMessage();
+    }
+
+    if (empty($androidResult)) {
+      $androidResult = $androidException->getMessage();
+    }
+
+    return [
+      'ios'     => $iosResult,
+      'android' => $androidResult,
+    ];
   }
 }
