@@ -1,0 +1,9 @@
+build:
+  stage: build
+  script:
+    - "php /var/www/migration-tools/bin/ci/jobs/prepareTests.php $CI_PROJECT_NAME $CI_COMMIT_REF_NAME"
+
+test:
+  stage: test
+  script:
+    - "php /var/www/migration-tools/bin/ci/jobs/runTests.php"
