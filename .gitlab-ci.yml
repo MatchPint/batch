@@ -7,3 +7,8 @@ test:
   stage: test
   script:
     - "php /var/www/migration-tools/bin/ci/jobs/runTests.php"
+
+deploy:
+  stage: deploy
+  script:
+    - "php /var/www/migration-tools/bin/ci/jobs/deployStaging.php $CI_COMMIT_REF_NAME"
