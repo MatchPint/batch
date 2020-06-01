@@ -1,3 +1,16 @@
+stages:
+  - syntax
+  - build
+  - test
+  - deploy
+
+syntax:
+  stage: syntax
+  except:
+    - master
+  script:
+    - "php /var/www/migration-tools/bin/ci/jobs/syntaxCheck.php $CI_COMMIT_REF_NAME $CI_COMMIT_SHA $CI_COMMIT_BEFORE_SHA"
+
 build:
   stage: build
   script:
@@ -10,5 +23,7 @@ test:
 
 deploy:
   stage: deploy
+  only:
+    - develop
   script:
     - "php /var/www/migration-tools/bin/ci/jobs/deployStaging.php $CI_COMMIT_REF_NAME"
