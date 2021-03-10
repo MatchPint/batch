@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="MatchPint Standards">
+    <description>MatchPint Coding Standard</description>
+
+    <file>src</file>
+
+    <exclude-pattern>etc</exclude-pattern>
+    <exclude-pattern>log</exclude-pattern>
+    <exclude-pattern>public</exclude-pattern>
+    <exclude-pattern>services</exclude-pattern>
+    <exclude-pattern>vendor</exclude-pattern>
+    <exclude-pattern>translations</exclude-pattern>
+
+    <arg name="report" value="summary"/>
+    <arg name="colors"/>
+    <arg value="p"/>
+    <ini name="memory_limit" value="128M"/>
+
+    <rule ref="PSR2"/>
+</ruleset>

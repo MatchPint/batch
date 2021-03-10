@@ -1,0 +1,23 @@
+
+name: Coding Standards
+
+on: [push]
+
+jobs:
+  standards:
+    name: Run Standards Check
+    runs-on: ubuntu-latest
+  
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          tools: composer, phpcs, phpcbf, phpunit
+          extensions: imagick, swoole, fileinfo, gd, intl, json, mbstring, mysqli, pdo, phalcon3, posix, soap, xml, zip, curl
+
+      - name: Check coding standards
+        run: |
+          phpcs --standard=phpcs.xml --error-severity=1 --warning-severity=8
